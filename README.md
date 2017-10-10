@@ -1,2 +1,6 @@
-# mydigitalstructure-sdk-nodejs-module
-mydigitalstructure SDK NodeJS Module (npm)
+mydigitalstructure-sdk-nodejs-module
+====================================
+
+node module for mydigitalstucture
+
+npm install mydigitalstucture
