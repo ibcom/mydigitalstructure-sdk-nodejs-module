@@ -100,6 +100,8 @@ module.exports =
 				var sData = sData + '&sid=' + oSession.sid +
 									'&logonkey=' + oSession.logonkey;
 					
+				if (oOptions.type == undefined) {oOptions.type = 'POST'}
+					
 				var options =
 				{
 					hostname: oSettings.hostname,
