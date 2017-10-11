@@ -1,4 +1,4 @@
-var _ = require('lodash');
+var _ = require('lodash')
 
 module.exports = 
 {
@@ -24,7 +24,18 @@ module.exports =
 							var sSettings = buffer.toString();
 							if (process.env.DEBUG) {console.log('#myds.init.settings:' + sSettings)};
 							var oSettings = JSON.parse(sSettings);
-							module.exports.data.settings = oSettings;
+							module.exports.data._settings = oSettings;
+
+							if (!_.isUndefined(oSettings))
+							{
+								if (!_.isUndefined(oSettings.mydigitalstructure))
+								{
+									oSettings = oSettings.mydigitalstructure;
+								}
+
+								module.exports.data.settings = oSettings;
+							}
+
 							fLogon(fCallBack, oSettings)
 						}	
 					});
