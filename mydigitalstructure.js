@@ -4,11 +4,6 @@ module.exports =
 {
 	data: {session: undefined},
 
-	add:  function (num)
-			{
-				module.exports.data.s = module.exports.data.s + num;
-			},
-
 	init: function (fCallBack, oSettings)
 			{
 				var fLogon = module.exports.logon;
