@@ -2,18 +2,11 @@ var _ = require('lodash')
 
 module.exports = 
 {
-	data: {session: undefined},
+	data: 	{session: undefined},
 
-	add:  function (num)
+	init: 	function (callBack, settings)
 			{
-				module.exports.data.s = module.exports.data.s + num;
-			},
-
-	init: function (fCallBack, oSettings)
-			{
-				var fLogon = module.exports.logon;
-
-				if (oSettings == undefined)
+				if (settings == undefined)
 				{	
 					var fs = require('fs');
 
@@ -21,33 +14,32 @@ module.exports =
 					{
 						if (!err)
 						{	
-							var sSettings = buffer.toString();
-							if (process.env.DEBUG) {console.log('#myds.init.settings:' + sSettings)};
-							var oSettings = JSON.parse(sSettings);
-							module.exports.data._settings = oSettings;
+							var _settings = buffer.toString();
+							settings = JSON.parse(_settings);
+							module.exports.data._settings = settings;
 
-							if (!_.isUndefined(oSettings))
+							if (!_.isUndefined(settings))
 							{
-								if (!_.isUndefined(oSettings.mydigitalstructure))
+								if (!_.isUndefined(settings.mydigitalstructure))
 								{
-									oSettings = oSettings.mydigitalstructure;
+									settings = settings.mydigitalstructure;
 								}
 
-								module.exports.data.settings = oSettings;
+								module.exports.data.settings = settings;
 							}
 
-							fLogon(fCallBack, oSettings)
+							module.exports.logon(callBack, settings)
 						}	
 					});
 				}
 				else
 				{
-					module.exports.data.settings = oSettings;
-					fLogon(fCallBack, oSettings);
+					module.exports.data.settings = settings;
+					module.exports.logon(callBack, settings);
 				}	
 			},
 
-	logon: function (fCallBack, oSettings)
+	logon: 	function (fCallBack, oSettings)
 			{
 				var https = require('https');
 				var sData = 'logon=' + oSettings.logon + 
@@ -96,7 +88,7 @@ module.exports =
 				req.end()
 			},
 
-	send: function (oOptions, sData, fCallBack)
+	send: 	function (oOptions, sData, fCallBack)
 			{
 				var https = require('https');
 				var oSettings = module.exports.data.settings;
@@ -173,8 +165,7 @@ module.exports =
 				req.end()
 			},
 
-	_util:
-			{
+	_util: 	{
 				search:  
 				{	
 					init: function ()
