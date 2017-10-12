@@ -4,6 +4,11 @@ module.exports =
 {
 	data: {session: undefined},
 
+	add:  function (num)
+			{
+				module.exports.data.s = module.exports.data.s + num;
+			},
+
 	init: function (fCallBack, oSettings)
 			{
 				var fLogon = module.exports.logon;
@@ -96,12 +101,35 @@ module.exports =
 				var https = require('https');
 				var oSettings = module.exports.data.settings;
 				var oSession = module.exports.data.session;
+				var sRequestData;
 
-				var sData = sData + '&sid=' + oSession.sid +
-									'&logonkey=' + oSession.logonkey;
-					
+				if (_.isUndefined(sData))
+				{
+					sRequestData = oOptions.data
+				}
+				else
+				{
+					sRequestData = sData
+				}
+
+				if (!_.isUndefined(sRequestData))
+				{	
+					sRequestData = sRequestData + '&sid=' + oSession.sid + '&logonkey=' + oSession.logonkey;
+				}
+				else
+				{
+					sRequestData = 'sid=' + oSession.sid + '&logonkey=' + oSession.logonkey;
+				}	
+
+				if (process.env.DEBUG) {console.log('####data:' + sRequestData)};
+
+				if (_.isUndefined(fCallBack))
+				{
+					fCallBack = oOptions.callBack
+				}					
+						
 				if (oOptions.type == undefined) {oOptions.type = 'POST'}
-					
+						
 				var options =
 				{
 					hostname: oSettings.hostname,
@@ -111,9 +139,11 @@ module.exports =
 					headers:
 					{
 						'Content-Type': 'application/x-www-form-urlencoded',
-						'Content-Length': sData.length
+						'Content-Length': sRequestData.length
 					}
 				};
+
+				if (process.env.DEBUG) {console.log('####options:' + JSON.stringify(options))};
 
 				var req = https.request(options, function(res)
 				{
@@ -129,17 +159,39 @@ module.exports =
 					res.on('end', function ()
 					{	
 						if (process.env.DEBUG) {console.log('#myds.send.res.end.response:' + data)}
-				    	if (_.isFunction(fCallBack)) {fCallBack({data: data})};
+				    	if (_.isFunction(fCallBack)) {fCallBack(oOptions, data)};
 					});
 				});
 
 				req.on('error', function(error)
 				{
 					if (process.env.DEBUG) {console.log('#myds.logon.req.error.response:' + error.message)}
-				  	if (fCallBack) {fCallBack({error: error})};
+				  	if (fCallBack) {fCallBack(oOptions, data, error)};
 				});
 
-				req.write(sData);
+				req.write(sRequestData);
 				req.end()
-			}		
+			},
+
+	_util:
+			{
+				search:  
+				{	
+					init: function ()
+					{
+						var criteria = 
+						{
+							"fields": [],
+							"summaryFields": [],
+							"filters": [],
+							"sorts": [],
+							"options": {},
+							"customoptions": []
+						}
+
+						return criteria
+					}
+				}
+			}							
+
 }
