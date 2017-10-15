@@ -2,18 +2,11 @@ var _ = require('lodash')
 
 module.exports = 
 {
-	data: {session: undefined},
+	data: 	{session: undefined},
 
-	add:  function (num)
+	init: 	function (callBack, settings)
 			{
-				module.exports.data.s = module.exports.data.s + num;
-			},
-
-	init: function (fCallBack, oSettings)
-			{
-				var fLogon = module.exports.logon;
-
-				if (oSettings == undefined)
+				if (settings == undefined)
 				{	
 					var fs = require('fs');
 
@@ -21,48 +14,47 @@ module.exports =
 					{
 						if (!err)
 						{	
-							var sSettings = buffer.toString();
-							if (process.env.DEBUG) {console.log('#myds.init.settings:' + sSettings)};
-							var oSettings = JSON.parse(sSettings);
-							module.exports.data._settings = oSettings;
+							var _settings = buffer.toString();
+							settings = JSON.parse(_settings);
+							module.exports.data._settings = settings;
 
-							if (!_.isUndefined(oSettings))
+							if (!_.isUndefined(settings))
 							{
-								if (!_.isUndefined(oSettings.mydigitalstructure))
+								if (!_.isUndefined(settings.mydigitalstructure))
 								{
-									oSettings = oSettings.mydigitalstructure;
+									settings = settings.mydigitalstructure;
 								}
 
-								module.exports.data.settings = oSettings;
+								module.exports.data.settings = settings;
 							}
 
-							fLogon(fCallBack, oSettings)
+							module.exports.logon(callBack, settings)
 						}	
 					});
 				}
 				else
 				{
-					module.exports.data.settings = oSettings;
-					fLogon(fCallBack, oSettings);
+					module.exports.data.settings = settings;
+					module.exports.logon(callBack, settings);
 				}	
 			},
 
-	logon: function (fCallBack, oSettings)
+	logon: 	function (callBack, settings)
 			{
 				var https = require('https');
-				var sData = 'logon=' + oSettings.logon + 
-							'&password=' + oSettings.password;
+				var requestData = 'logon=' + settings.logon + 
+									'&password=' + settings.password;
 
 				var options =
 				{
-					hostname: oSettings.hostname,
+					hostname: settings.hostname,
 					port: 443,
 					path: '/rpc/logon/?method=LOGON',
 					method: 'POST',
 					headers:
 					{
 						'Content-Type': 'application/x-www-form-urlencoded',
-						'Content-Length': sData.length
+						'Content-Length': requestData.length
 					}
 				};
 
@@ -80,72 +72,72 @@ module.exports =
 					res.on('end', function ()
 					{	
 						if (process.env.DEBUG) {console.log('#myds.logon.res.end.response:' + data)};
-						var oData = JSON.parse(data);
-				    	module.exports.data.session = oData;
-				    	if (_.isFunction(fCallBack)) {fCallBack({data: oData, settings: oSettings})};
+						var _data = JSON.parse(data);
+				    	module.exports.data.session = _data;
+				    	if (_.isFunction(callBack)) {callBack({data: _data, settings: settings})};
 					});
 				});
 
 				req.on('error', function(error)
 				{
 					if (process.env.DEBUG) {console.log('#myds.logon.req.error.response:' + error.message)}
-				  	if (_.isFunction(fCallBack)) {fCallBack({error: error})};
+				  	if (_.isFunction(callBack)) {callBack({error: error})};
 				});
 
-				req.write(sData);
+				req.write(requestData);
 				req.end()
 			},
 
-	send: function (oOptions, sData, fCallBack)
+	send: 	function (options, data, callBack)
 			{
 				var https = require('https');
-				var oSettings = module.exports.data.settings;
-				var oSession = module.exports.data.session;
-				var sRequestData;
+				var settings = module.exports.data.settings;
+				var session = module.exports.data.session;
+				var requestData;
 
-				if (_.isUndefined(sData))
+				if (_.isUndefined(data))
 				{
-					sRequestData = oOptions.data
+					requestData = options.data
 				}
 				else
 				{
-					sRequestData = sData
+					requestData = data
 				}
 
-				if (!_.isUndefined(sRequestData))
+				if (!_.isUndefined(requestData))
 				{	
-					sRequestData = sRequestData + '&sid=' + oSession.sid + '&logonkey=' + oSession.logonkey;
+					requestData = requestData + '&sid=' + session.sid + '&logonkey=' + session.logonkey;
 				}
 				else
 				{
-					sRequestData = 'sid=' + oSession.sid + '&logonkey=' + oSession.logonkey;
+					requestData = 'sid=' + session.sid + '&logonkey=' + session.logonkey;
 				}	
 
-				if (process.env.DEBUG) {console.log('####data:' + sRequestData)};
+				if (process.env.DEBUG) {console.log('####data:' + requestData)};
 
-				if (_.isUndefined(fCallBack))
+				if (_.isUndefined(callBack))
 				{
-					fCallBack = oOptions.callBack
+					callBack = options.callBack
 				}					
 						
-				if (oOptions.type == undefined) {oOptions.type = 'POST'}
+				if (options.type == undefined) {options.type = 'POST'}
 						
-				var options =
+				var requestOptions =
 				{
-					hostname: oSettings.hostname,
+					hostname: settings.hostname,
 					port: 443,
-					path: oOptions.url,
-					method: oOptions.type,
+					path: options.url,
+					method: options.type,
 					headers:
 					{
 						'Content-Type': 'application/x-www-form-urlencoded',
-						'Content-Length': sRequestData.length
+						'Content-Length': requestData.length
 					}
 				};
 
-				if (process.env.DEBUG) {console.log('####options:' + JSON.stringify(options))};
+				if (process.env.DEBUG) {console.log('####options:' + JSON.stringify(requestOptions))};
 
-				var req = https.request(options, function(res)
+				var req = https.request(requestOptions, function(res)
 				{
 					res.setEncoding('utf8');
 
@@ -159,22 +151,21 @@ module.exports =
 					res.on('end', function ()
 					{	
 						if (process.env.DEBUG) {console.log('#myds.send.res.end.response:' + data)}
-				    	if (_.isFunction(fCallBack)) {fCallBack(oOptions, data)};
+				    	if (_.isFunction(callBack)) {callBack(options, data)};
 					});
 				});
 
 				req.on('error', function(error)
 				{
 					if (process.env.DEBUG) {console.log('#myds.logon.req.error.response:' + error.message)}
-				  	if (fCallBack) {fCallBack(oOptions, data, error)};
+				  	if (callBack) {callBack(options, data, error)};
 				});
 
-				req.write(sRequestData);
+				req.write(requestData);
 				req.end()
 			},
 
-	_util:
-			{
+	_util: 	{
 				search:  
 				{	
 					init: function ()
