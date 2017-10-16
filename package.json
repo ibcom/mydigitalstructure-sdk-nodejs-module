@@ -1,6 +1,6 @@
 {
   "name": "mydigitalstructure",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "licence": [
     {
       "type": "MIT",
@@ -19,7 +19,8 @@
     "url": "https://github.com/ibcom/mydigitalstructure-sdk-nodejs-module.git"
   },
   "dependencies": {
-    "lodash": "4.17.4"
+    "lodash": "4.17.4",
+    "moment": "*"
   },
   "engines": {
     "node": "*"
