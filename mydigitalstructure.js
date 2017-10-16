@@ -1,4 +1,5 @@
 var _ = require('lodash')
+var moment = require('moment');
 
 module.exports = 
 {
@@ -44,10 +45,10 @@ module.exports =
 			{
 				var https = require('https');
 				var authenticationLevel = module.exports.data.settings.authenticationLevel;
-				if (_.isUndefined(authenticationLevel) {authenticationLevel = 1});
+				if (_.isUndefined(authenticationLevel)) {authenticationLevel = 1};
 				var logon = settings.logon;
 				var password = settings.password;
-				var code = mydigitalstructure._util.param.get(param, 'code').value;
+				var code = module.exports._util.param.get(param, 'code').value;
 
 				var data = 
 				{
@@ -62,16 +63,18 @@ module.exports =
 
 				if (authenticationLevel == 1)
 				{
-					requestData += '&passwordhash=' + mydigitalstructure._util.hash(logon + password);
+					requestData += '&passwordhash=' + module.exports._util.hash(logon + password);
 				}
 				else if (authenticationLevel == 2)
 				{
-					requestData += '&passwordhash=' + mydigitalstructure._util.hash(logon + password + module.exports.data.session.logonkey)
+					requestData += '&passwordhash=' + module.exports._util.hash(logon + password + module.exports.data.session.logonkey)
 				}
 				else if (authenticationLevel == 3)
 				{
-					requestData += '&passwordhash=' + mydigitalstructure._util.hash(logon + password + module.exports.data.session.logonkey + code)
+					requestData += '&passwordhash=' + module.exports._util.hash(logon + password + module.exports.data.session.logonkey + code)
 				}
+
+				if (process.env.DEBUG) {console.log('#myds.logon.resquest:' + requestData)};
 				
 				var options =
 				{
@@ -119,6 +122,7 @@ module.exports =
 	send: function (options, data, callBack)
 			{
 				var https = require('https');
+				var querystring = require('querystring');
 				var settings = module.exports.data.settings;
 				var session = module.exports.data.session;
 				var requestData;
@@ -132,16 +136,26 @@ module.exports =
 					requestData = data
 				}
 
-				if (!_.isUndefined(requestData))
-				{	
-					requestData = requestData + '&sid=' + session.sid + '&logonkey=' + session.logonkey;
+				if (_.isObject(requestData))
+				{
+					data.sid = session.sid;
+					data.logonkey = session.logonkey;
+
+					requestData = querystring.stringify(requestData);
 				}
 				else
 				{
-					requestData = 'sid=' + session.sid + '&logonkey=' + session.logonkey;
+					if (!_.isUndefined(requestData))
+					{	
+						requestData = requestData + '&sid=' + session.sid + '&logonkey=' + session.logonkey;
+					}
+					else
+					{
+						requestData = 'sid=' + session.sid + '&logonkey=' + session.logonkey;
+					}
 				}	
 
-				if (process.env.DEBUG) {console.log('####data:' + requestData)};
+				if (process.env.DEBUG) {console.log('####request.data:' + requestData)};
 
 				if (_.isUndefined(callBack))
 				{
@@ -215,7 +229,6 @@ module.exports =
 
 				hash: function (data)
 				{
-					var data = "do shash'owania";
 					var crypto = require('crypto');
 					return crypto.createHash('md5').update(data).digest("hex");
 				},
