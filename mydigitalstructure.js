@@ -59,7 +59,6 @@ module.exports =
 
 				var requestData = 'logon=' + logon +
 										'&localtime=' + moment().format('D MMM YYYY HH:mm:ss');
-									//'&password=' + settings.password;
 
 				if (authenticationLevel == 1)
 				{
@@ -74,7 +73,7 @@ module.exports =
 					requestData += '&passwordhash=' + module.exports._util.hash(logon + password + module.exports.data.session.logonkey + code)
 				}
 
-				if (process.env.DEBUG) {console.log('#myds.logon.resquest:' + requestData)};
+				module.exports._util.testing.data(requestData, 'mydigitalstructure.logon.request');
 				
 				var options =
 				{
@@ -89,6 +88,8 @@ module.exports =
 					}
 				};
 
+				module.exports._util.testing.data(options, 'mydigitalstructure.send.request.options');
+
 				var req = https.request(options, function(res)
 				{
 					res.setEncoding('utf8');
@@ -102,7 +103,7 @@ module.exports =
 					
 					res.on('end', function ()
 					{	
-						if (process.env.DEBUG) {console.log('#myds.logon.res.end.response:' + data)};
+						module.exports._util.testing.data(data, 'mydigitalstructure.send.response.end');
 						var _data = JSON.parse(data);
 				    	module.exports.data.session = _data;
 				    	if (_.isFunction(callBack)) {callBack({data: _data, settings: settings})};
@@ -111,9 +112,11 @@ module.exports =
 
 				req.on('error', function(error)
 				{
-					if (process.env.DEBUG) {console.log('#myds.logon.req.error.response:' + error.message)}
+					module.exports._util.testing.data(error.message, 'mydigitalstructure.logon.response.error');
 				  	if (_.isFunction(callBack)) {callBack({error: error})};
 				});
+
+				module.exports._util.testing.data(requestData, 'mydigitalstructure.send.request.data');
 
 				req.write(requestData);
 				req.end()
@@ -153,9 +156,7 @@ module.exports =
 					{
 						requestData = 'sid=' + session.sid + '&logonkey=' + session.logonkey;
 					}
-				}	
-
-				if (process.env.DEBUG) {console.log('####request.data:' + requestData)};
+				}
 
 				if (_.isUndefined(callBack))
 				{
@@ -177,7 +178,7 @@ module.exports =
 					}
 				};
 
-				if (process.env.DEBUG) {console.log('####options:' + JSON.stringify(requestOptions))};
+				module.exports._util.testing.data(options, 'mydigitalstructure.send.request.options');
 
 				var req = https.request(requestOptions, function(res)
 				{
@@ -192,16 +193,18 @@ module.exports =
 					
 					res.on('end', function ()
 					{	
-						if (process.env.DEBUG) {console.log('#myds.send.res.end.response:' + data)}
+						module.exports._util.testing.data(data, 'mydigitalstructure.send.response.end');
 				    	if (_.isFunction(callBack)) {callBack(options, data)};
 					});
 				});
 
 				req.on('error', function(error)
 				{
-					if (process.env.DEBUG) {console.log('#myds.logon.req.error.response:' + error.message)}
+					module.exports._util.testing.message(error.message, 'mydigitalstructure.send.response.error');
 				  	if (callBack) {callBack(options, data, error)};
 				});
+
+				module.exports._util.testing.data(requestData, 'mydigitalstructure.send.request.data');
 
 				req.write(requestData);
 				req.end()
@@ -209,6 +212,71 @@ module.exports =
 
 	_util: 
 			{
+				testing:
+				{
+					message: function (message, context)
+					{
+						var settings = module.exports.data.settings.testing;
+
+						if (_.isObject(settings))
+						{
+							if (settings.status)
+							{
+								if (!_.isUndefined(context)) {console.log('[' + context + ']:')}
+								console.log(message);
+
+								if (!_.isUndefined(settings.break))
+								{
+									console.log(settings.break)
+								}
+							}
+						}	
+					},
+
+					data: function (data, context)
+					{
+						var settings = module.exports.data.settings.testing;
+
+						if (_.isObject(settings))
+						{
+							if (settings.status && settings.showData)
+							{
+								if (_.isObject(data))
+								{
+									data = JSON.stringify(data)
+								}
+
+								if (!_.isUndefined(context)) {console.log('[' + context + '][data]:')}
+								console.log(data);
+
+								if (!_.isUndefined(settings.break))
+								{
+									console.log(settings.break)
+								}	
+							}
+						}	
+					},
+
+					status: function (status)
+					{
+						var settings = module.exports.data.settings.testing;
+
+						if (_.isObject(settings))
+						{
+							if (_.isUndefined(status))
+							{
+								status = module.exports.data.settings.testing.status;
+							}
+							else
+							{
+								module.exports.data.settings.testing.status = status;
+							}
+						}
+
+						return status
+					}
+				},
+
 				search:  
 				{	
 					init: function ()
@@ -259,11 +327,11 @@ module.exports =
 
 				onComplete: function (param)
 				{
-					if (mydigitalstructure._util.param.get(param, 'onComplete').exists)
+					if (module.exports._util.param.get(param, 'onComplete').exists)
 					{
-						var onComplete = mydigitalstructure._util.param.get(param, 'onComplete').value;
+						var onComplete = module.exports._util.param.get(param, 'onComplete').value;
 	
-						if (mydigitalstructure._util.param.get(param, 'onCompleteWhenCan').exists)
+						if (module.exports._util.param.get(param, 'onCompleteWhenCan').exists)
 						{
 							param.onComplete = param.onCompleteWhenCan;
 							delete param.onCompleteWhenCan;
@@ -275,9 +343,9 @@ module.exports =
 
 						onComplete(param);
 					}
-					else if (mydigitalstructure._util.param.get(param, 'onCompleteWhenCan').exists)
+					else if (module.exports._util.param.get(param, 'onCompleteWhenCan').exists)
 					{
-						var onCompleteWhenCan = mydigitalstructure._util.param.get(param, 'onCompleteWhenCan').value;
+						var onCompleteWhenCan = module.exports._util.param.get(param, 'onCompleteWhenCan').value;
 
 						delete param.onCompleteWhenCan;
 					
@@ -332,9 +400,9 @@ module.exports =
 								{
 									var onlyIfNoKey = false;
 
-									if (mydigitalstructure._util.param.get(options, 'onlyIfNoKey').exists)
+									if (module.exports._util.param.get(options, 'onlyIfNoKey').exists)
 									{
-										onlyIfNoKey = mydigitalstructure._util.param.get(options, 'onlyIfNoKey').value
+										onlyIfNoKey = module.exports._util.param.get(options, 'onlyIfNoKey').value
 									}
 
 									if (param === undefined) {param = {}}
@@ -352,24 +420,25 @@ module.exports =
 								}									
 				},
 
-				logoff: 	function (param)
+				logoff: 	function (param, response)
 				{
-					var uri = mydigitalstructure._util.param.get(param, 'uri', {"default": '/'}).value;
-					var refresh = mydigitalstructure._util.param.get(param, 'refresh', {"default": true}).value;
+					var uri = module.exports._util.param.get(param, 'uri', {"default": '/'}).value;
+					var refresh = module.exports._util.param.get(param, 'refresh', {"default": true}).value;
 
-					$.ajax(
+					if (_.isUndefined(response))
 					{
-						type: 'POST',
-						url: '/rpc/core/?method=CORE_LOGOFF',
-						dataType: 'json',
-						async: false,
-						global: false,
-						success: function (data)
+						module.exports.send(
 						{
-							mydigitalstructure._scope.user = undefined;
-							if (refresh) {window.location.href = uri};
-						}
-					});
+							url: '/rpc/core/?method=CORE_LOGOFF'
+						},
+						'',
+						module.exports._util.logoff);
+					}
+					else
+					{
+						module.exports._util.testing.log('Logged off', 'mydigitalstructure._util.logoff');
+						module.exports.data.session = undefined;
+					}	
 				}			
 			}							
 }
