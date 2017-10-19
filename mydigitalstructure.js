@@ -35,6 +35,13 @@ module.exports =
 				}
 				else
 				{
+					module.exports.data._settings = settings;
+							
+					if (!_.isUndefined(settings.mydigitalstructure))
+					{
+						settings = settings.mydigitalstructure;
+					}
+
 					module.exports.data.settings = settings;
 					module.exports.logon(callBack, settings);
 				}	
