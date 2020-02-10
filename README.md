@@ -28,6 +28,6 @@ Data:
 
 Cloud:
 
-- mydigitalstructure.save({object:, data:, callback:});
-- mydigitalstructure.retrieve({object:, data:, callback:});
-- mydigitalstructure.invoke({object:, data:, callback:});
+- mydigitalstructure.cloud.save({object:, data:, callback:});
+- mydigitalstructure.cloud.retrieve({object:, data:, callback:});
+- mydigitalstructure.cloud.invoke({object:, data:, callback:});
