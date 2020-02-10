@@ -16,18 +16,18 @@ This latest version of the nodejs module has been upgraded to use the same patte
 
 Methods;
 
-# Controller:
+Controller:
 
 ## mydigitalstructure.add({name:, note:, code:});
 ## mydigitalstructure.invoke(name, parameters for controller, data for controller);
 
-# Data:
+Data:
 
-## mydigitalstructure.set({scope:, context:, name:, value:});
-## mydigitalstructure.get({scope:, context:, name:});
+- mydigitalstructure.set({scope:, context:, name:, value:});
+- mydigitalstructure.get({scope:, context:, name:});
 
-# Cloud:
+Cloud:
 
-## mydigitalstructure.save({object:, data:, callback:});
-## mydigitalstructure.retrieve({object:, data:, callback:});
-## mydigitalstructure.invoke({object:, data:, callback:});
+- mydigitalstructure.save({object:, data:, callback:});
+- mydigitalstructure.retrieve({object:, data:, callback:});
+- mydigitalstructure.invoke({object:, data:, callback:});
