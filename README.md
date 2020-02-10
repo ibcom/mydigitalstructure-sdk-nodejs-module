@@ -22,13 +22,13 @@ Controller:
 
 <!-- end of the list -->
 
-* Data:
+Data:
 - mydigitalstructure.set({scope:, context:, name:, value:});
 - mydigitalstructure.get({scope:, context:, name:});
 
 <!-- end of the list -->
 
-* Cloud:
+Cloud:
 - mydigitalstructure.cloud.save({object:, data:, callback:});
 - mydigitalstructure.cloud.retrieve({object:, data:, callback:});
 - mydigitalstructure.cloud.invoke({object:, data:, callback:});
