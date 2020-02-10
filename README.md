@@ -16,7 +16,7 @@ This latest version of the nodejs module has been upgraded to use the same patte
 
 **Methods;**
 
-* Controller:
+Controller:
 - mydigitalstructure.add({name:, note:, code:});
 - mydigitalstructure.invoke(name, parameters for controller, data for controller);
 
