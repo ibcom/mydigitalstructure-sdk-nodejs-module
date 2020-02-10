@@ -20,9 +20,11 @@ This latest version of the nodejs module has been upgraded to use the same patte
 - mydigitalstructure.add({name:, note:, code:});
 - mydigitalstructure.invoke(name, parameters for controller, data for controller);
 
+
 * Data:
 - mydigitalstructure.set({scope:, context:, name:, value:});
 - mydigitalstructure.get({scope:, context:, name:});
+
 
 * Cloud:
 - mydigitalstructure.cloud.save({object:, data:, callback:});
