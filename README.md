@@ -18,8 +18,8 @@ Methods;
 
 Controller:
 
-## mydigitalstructure.add({name:, note:, code:});
-## mydigitalstructure.invoke(name, parameters for controller, data for controller);
+- mydigitalstructure.add({name:, note:, code:});
+- mydigitalstructure.invoke(name, parameters for controller, data for controller);
 
 Data:
 
