@@ -1,16 +1,18 @@
-mydigitalstructure-sdk-nodejs-module
+mydigitalstructure Node.js module
 ====================================
 
-node module for mydigitalstucture.cloud
+Node.js module for mydigitalstucture.cloud
 
 Makes it easy to init your node app onto the mydigitalstructure.cloud platform / API and send requests.
 
-> http://docs.mydigitalstructure.com/gettingstarted_nodejs
+> http://mydigitalstructure.cloud
+
+> http://docs.mydigitalstructure.cloud/gettingstarted_nodejs
 
 > npm install mydigitalstucture
 
-mydigitalstructure nodejs Module Version 2.0.0
-----------------------------------------------
+Version 2.0.0
+-------------
 
 This latest version of the nodejs module has been upgraded to use the same patterns as the Javascript library for the browser.
 
