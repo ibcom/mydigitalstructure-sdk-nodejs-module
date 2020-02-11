@@ -11,6 +11,8 @@ Makes it easy to init your node app onto the mydigitalstructure.cloud platform /
 
 > npm install mydigitalstucture
 
+> Example app; https://github.com/ibcom/mydigitalstructure-sdk-nodejs
+
 Version 2.0.0
 -------------
 
