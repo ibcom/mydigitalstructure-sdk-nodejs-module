@@ -1,7 +1,7 @@
 mydigitalstructure Node.js module
 ====================================
 
-Node.js module for mydigitalstucture.cloud
+Node.js module for mydigitalstructure.cloud
 
 Makes it easy to init your node app onto the mydigitalstructure.cloud platform / API and send requests.
 
@@ -14,23 +14,23 @@ Makes it easy to init your node app onto the mydigitalstructure.cloud platform /
 Version 2.0.0
 -------------
 
-This latest version of the nodejs module has been upgraded to use the same patterns as the Javascript library for the browser.
+**Initialise;**
 
-**Methods;**
+`var mydigitalstructure = require('mydigitalstructure');`
 
-Controller:
+Controller methods:
 - mydigitalstructure.add({name:, note:, code:});
 - mydigitalstructure.invoke(name, parameters for controller, data for controller);
 
 <!-- end of the list -->
 
-Data:
+Local data storage methods:
 - mydigitalstructure.set({scope:, context:, name:, value:});
 - mydigitalstructure.get({scope:, context:, name:});
 
 <!-- end of the list -->
 
-Cloud:
+Cloud data storage methods:
 - mydigitalstructure.cloud.save({object:, data:, callback:});
 - mydigitalstructure.cloud.retrieve({object:, data:, callback:});
 - mydigitalstructure.cloud.invoke({object:, data:, callback:});
