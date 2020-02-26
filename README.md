@@ -9,7 +9,7 @@ Makes it easy to init your node app onto the mydigitalstructure.cloud platform /
 
 > http://docs.mydigitalstructure.cloud/gettingstarted_nodejs
 
-> npm install mydigitalstucture
+> npm install mydigitalstructure
 
 > Example app; https://github.com/ibcom/mydigitalstructure-sdk-nodejs
 
