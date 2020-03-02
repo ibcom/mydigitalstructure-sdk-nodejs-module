@@ -263,7 +263,20 @@ module.exports =
 		logon: function (param) {module.exports.logon(param)},
 		logoff: function (param) {module.exports.logoff(param)},
 		send: function (param, data, callBack) {module.exports.send(param, data, callBack)},
-		invoke: function (param, data, callBack) {module.exports.send(param, data, callBack)},
+		invoke: function (param, data, callBack)
+		{
+			if (param.url == undefined && param.method != undefined)
+			{
+				param.url = '/rpc/' + param.method.split('_')[0] + '/?method=' + (param.method).toUpperCase();
+			}
+
+			if (param.url == undefined && param.object != undefined)
+			{
+				param.url = '/rpc/' + param.object.split('_')[0] + '/?method=' + (param.object).toUpperCase() + '_MANAGE';
+			}
+
+			module.exports.send(param, data, callBack)
+		},
 		create: function (param)
 		{
 			if (typeof arguments[0] != 'object')
@@ -309,8 +322,6 @@ module.exports =
 
 			param.endpoint = param.object.split('_')[0];
 			param.data.remove = 1;
-
-
 
 			module.exports.send(
 			{
@@ -950,6 +961,6 @@ module.exports =
 
 	add: function (param) {module.exports._util.controller.add(param)},
 	invoke: function (param, controllerParam, controllerData) {module.exports._util.controller.invoke(param, controllerParam, controllerData)},
-	set: function (param) {module.exports._util.data.set(param)},
-	get: function (param) {module.exports._util.data.get(param)}
+	set: function (param) {return module.exports._util.data.set(param)},
+	get: function (param) {return module.exports._util.data.get(param)}
 }
