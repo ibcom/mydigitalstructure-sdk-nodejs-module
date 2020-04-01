@@ -466,7 +466,15 @@ module.exports =
 					if (settings.status == 'true' && settings.showData == 'true')
 					{
 						if (!_.isUndefined(context)) {console.log('[' + context + '][data]:')}
-						console.log(data);
+
+						if (_.isObject(data))
+						{
+							console.log(JSON.stringify(data))
+						}
+						else
+						{
+							console.log(data);
+						}
 
 						if (!_.isUndefined(settings.break))
 						{
