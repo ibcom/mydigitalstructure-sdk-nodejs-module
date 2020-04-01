@@ -3,7 +3,7 @@ var moment = require('moment');
 
 module.exports = 
 {
-	VERSION: '2.0.1',
+	VERSION: '2.0.5',
 
 	data: {session: undefined},
 	controller: {},
@@ -229,7 +229,7 @@ module.exports =
 			{	
 				module.exports._util.testing.data(data, 'mydigitalstructure.cloud.send.response.end');
 
-				if (_.startsWith(data, '{'))
+				if (_.startsWith('{'))
 				{
 					data = JSON.parse(data)
 				}
