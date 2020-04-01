@@ -229,7 +229,7 @@ module.exports =
 			{	
 				module.exports._util.testing.data(data, 'mydigitalstructure.cloud.send.response.end');
 
-				if (_.startsWith('{'))
+				if (_.startsWith(data, '{') && settings.convert == 'true')
 				{
 					data = JSON.parse(data)
 				}
@@ -427,8 +427,16 @@ module.exports =
 	{
 		message: function (data, context, linebreak)
 		{
-			if (!_.isUndefined(context)) {console.log('[' + context + '][data]:')}
-			console.log(data);
+			if (!_.isUndefined(context)) {console.log('[' + context + ']:')}
+
+			if (_.isObject(data))
+			{
+				console.log(JSON.stringify(data))
+			}
+			else
+			{
+				console.log(data);
+			}
 
 			if (!_.isUndefined(linebreak))
 			{
