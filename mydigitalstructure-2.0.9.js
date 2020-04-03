@@ -598,29 +598,15 @@ module.exports =
 					delete param.onComplete;
 				}
 
-				if (_.isFunction(onComplete))
-				{
-					onComplete(param);
-				}
-				else
-				{
-					module.exports._util.controller.invoke(onComplete, param)
-				}
+				onComplete(param);
 			}
 			else if (module.exports._util.param.get(param, 'onCompleteWhenCan').exists)
 			{
 				var onCompleteWhenCan = module.exports._util.param.get(param, 'onCompleteWhenCan').value;
 
 				delete param.onCompleteWhenCan;
-
-				if (_.isFunction(onCompleteWhenCan))
-				{
-					onCompleteWhenCan(param);
-				}
-				else
-				{
-					module.exports._util.controller.invoke(onCompleteWhenCan, param)
-				}
+			
+				onCompleteWhenCan(param);
 			}
 		},
 
