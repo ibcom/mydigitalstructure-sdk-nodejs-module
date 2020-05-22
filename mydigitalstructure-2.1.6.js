@@ -3,7 +3,7 @@ var moment = require('moment');
 
 module.exports = 
 {
-	VERSION: '2.1.5',
+	VERSION: '2.1.6',
 
 	data: {session: undefined},
 	controller: {},
