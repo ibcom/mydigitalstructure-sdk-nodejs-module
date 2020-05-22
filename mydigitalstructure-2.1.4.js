@@ -362,14 +362,15 @@ module.exports =
 				param.data = {id: param.data}
 			}
 
+			param.data.remove = 1;
+
 			if (_.isObject(param.data))
 			{
 				param.data = _.join(_.map(param.data, function (data, key) {return key + '=' + data}), '&')
 			}
 
 			param.endpoint = param.object.split('_')[0];
-			param.data.remove = 1;
-
+			
 			module.exports.send(
 			{
 				type: 'post',
