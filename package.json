@@ -19,7 +19,7 @@
     "url": "https://github.com/ibcom/mydigitalstructure-sdk-nodejs-module.git"
   },
   "dependencies": {
-    "lodash": "4.17.15",
+    "lodash": "4.17.19",
     "moment": "*"
   },
   "engines": {
