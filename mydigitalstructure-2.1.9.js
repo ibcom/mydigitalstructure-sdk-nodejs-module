@@ -10,11 +10,30 @@ module.exports =
 
 	init: function (callBack, settings)
 	{
-		if (settings == undefined)
+		if (_.isPlainObject(settings))
+		{
+			module.exports.data._settings = settings;
+					
+			if (!_.isUndefined(settings.mydigitalstructure))
+			{
+				settings = settings.mydigitalstructure;
+			}
+
+			module.exports.data.settings = settings;
+			module.exports.logon(callBack, settings);
+		}	
+		else
 		{	
+			var siteSuffix = '';
+
+			if (_.isString(settings))
+			{
+				siteSuffix = '-' + settings;
+			}
+
 			var fs = require('fs');
 
-			fs.readFile('settings.json', function (err, buffer)
+			fs.readFile('settings' + siteSuffix + '.json', function (err, buffer)
 			{
 				if (!err)
 				{	
@@ -40,18 +59,6 @@ module.exports =
 				}
 			});
 		}
-		else
-		{
-			module.exports.data._settings = settings;
-					
-			if (!_.isUndefined(settings.mydigitalstructure))
-			{
-				settings = settings.mydigitalstructure;
-			}
-
-			module.exports.data.settings = settings;
-			module.exports.logon(callBack, settings);
-		}	
 	},
 
 	logon: function (callBack, settings, param)
