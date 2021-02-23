@@ -3,7 +3,7 @@ var moment = require('moment');
 
 module.exports = 
 {
-	VERSION: '2.1.9',
+	VERSION: '2.2.1',
 
 	data: {session: undefined},
 	controller: {},
@@ -502,6 +502,11 @@ module.exports =
 					if (filter.name == undefined && filter.field != undefined)
 					{
 						filter.name = filter.field
+					}
+
+					if (filter.comparison == undefined)
+					{
+						filter.comparison = 'EQUAL_TO'
 					}
 				})
 			}
