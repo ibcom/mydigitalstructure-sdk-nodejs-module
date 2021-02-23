@@ -476,10 +476,54 @@ module.exports =
 						}
 					}
 
-					if (_.has(param, 'fields')) { param.data.criteria.fields = param.fields }
+					if (_.has(param, 'fields'))
+					{ 
+						if (param.fields != undefined)
+						{
+							if (_.isArray(param.fields))
+							{
+								if (_.isPlainObject(_.first(param.fields)))
+								{
+									param.data.criteria.fields = param.fields;
+								}
+								else
+								{
+									param.data.criteria.fields = _.map(param.fields, function (field) {return {name: field}});
+								}
+							}
+						}
+					}
+
+					if (_.has(param, 'sorts'))
+					{ 
+						if (_.isArray(param.sorts))
+						{
+							if (_.isObject(_.first(param.sorts)))
+							{
+								_.each(param.sorts, function (sort)
+								{
+									if (sort.direction == undefined)
+									{
+										sort.direction = 'asc'
+									}
+
+									if (sort.name == undefined)
+									{
+										sort.name = sort.field
+									}
+								});
+							}
+							else
+							{
+								param.sorts = _.map(param.sorts, function (sort) {return {name: sort, direction: 'asc'}});
+							}
+						}
+
+						param.data.criteria.sorts = param.sorts
+					}
+
 					if (_.has(param, 'summaryFields')) { param.data.criteria.summaryFields = param.summaryFields }
 					if (_.has(param, 'filters')) { param.data.criteria.filters = param.filters }
-					if (_.has(param, 'sorts')) { param.data.criteria.sorts = param.sorts }
 					if (_.has(param, 'options')) { param.data.criteria.options = param.options }
 					if (_.has(param, 'customOptions')) { param.data.criteria.customOptions = param.customOptions }
 					if (_.has(param, 'rows')) { param.data.criteria.options.rows = param.rows }
