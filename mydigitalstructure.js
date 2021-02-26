@@ -498,7 +498,7 @@ module.exports =
 					{ 
 						if (_.isArray(param.sorts))
 						{
-							if (_.isObject(_.first(param.sorts)))
+							if (_.isPlainObject(_.first(param.sorts)))
 							{
 								_.each(param.sorts, function (sort)
 								{
